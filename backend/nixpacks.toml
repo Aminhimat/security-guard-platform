@@ -3,11 +3,11 @@
   cmds = [
     "cd src/SecurityGuardPlatform.API",
     "dotnet restore",
-    "dotnet publish -c Release -o /app/bin"
+    "dotnet publish -c Release -o /app/out"
   ]
 
 [phases.start]
-  cmd = "dotnet /app/bin/SecurityGuardPlatform.API.dll"
+  cmd = "dotnet /app/out/SecurityGuardPlatform.API.dll"
 
 [variables]
   ASPNETCORE_ENVIRONMENT = "Production"
