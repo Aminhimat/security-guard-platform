@@ -29,6 +29,16 @@ if (builder.Environment.IsProduction())
     
     // Debug logging
     Console.WriteLine($"Environment: {builder.Environment.EnvironmentName}");
+    Console.WriteLine($"All environment variables containing 'DATABASE':");
+    foreach (DictionaryEntry env in Environment.GetEnvironmentVariables())
+    {
+        var key = env.Key.ToString();
+        if (key.Contains("DATABASE", StringComparison.OrdinalIgnoreCase))
+        {
+            var value = env.Value?.ToString();
+            Console.WriteLine($"  {key}: {(string.IsNullOrEmpty(value) ? "EMPTY" : value.Substring(0, Math.Min(50, value.Length)))}...");
+        }
+    }
     Console.WriteLine($"DATABASE_URL from env: {Environment.GetEnvironmentVariable("DATABASE_URL") ?? "NULL"}");
     Console.WriteLine($"Using connection string: {connectionString?.Substring(0, Math.Min(50, connectionString?.Length ?? 0))}...");
     
