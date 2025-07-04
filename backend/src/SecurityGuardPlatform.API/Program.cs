@@ -27,6 +27,11 @@ if (builder.Environment.IsProduction())
                           builder.Configuration.GetConnectionString("DATABASE_URL") ??
                           builder.Configuration.GetConnectionString("PostgreSQLConnection");
     
+    // Debug logging
+    Console.WriteLine($"Environment: {builder.Environment.EnvironmentName}");
+    Console.WriteLine($"DATABASE_URL from env: {Environment.GetEnvironmentVariable("DATABASE_URL") ?? "NULL"}");
+    Console.WriteLine($"Using connection string: {connectionString?.Substring(0, Math.Min(50, connectionString.Length ?? 0))}...");
+    
     if (string.IsNullOrEmpty(connectionString))
     {
         throw new InvalidOperationException("DATABASE_URL environment variable is not configured for production");
