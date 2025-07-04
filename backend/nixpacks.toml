@@ -1,0 +1,14 @@
+# Nixpacks configuration for Railway
+[phases.build]
+  cmds = [
+    "cd src/SecurityGuardPlatform.API",
+    "dotnet restore",
+    "dotnet publish -c Release -o /app/bin"
+  ]
+
+[phases.start]
+  cmd = "dotnet /app/bin/SecurityGuardPlatform.API.dll"
+
+[variables]
+  ASPNETCORE_ENVIRONMENT = "Production"
+  ASPNETCORE_URLS = "http://0.0.0.0:$PORT"

@@ -23,9 +23,14 @@ builder.Host.UseSerilog();
 if (builder.Environment.IsProduction())
 {
     // Production: Use PostgreSQL
-    var connectionString = builder.Configuration.GetConnectionString("DATABASE_URL") ?? 
-                          Environment.GetEnvironmentVariable("DATABASE_URL") ??
+    var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") ?? 
+                          builder.Configuration.GetConnectionString("DATABASE_URL") ??
                           builder.Configuration.GetConnectionString("PostgreSQLConnection");
+    
+    if (string.IsNullOrEmpty(connectionString))
+    {
+        throw new InvalidOperationException("DATABASE_URL environment variable is not configured for production");
+    }
     
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.UseNpgsql(connectionString));
@@ -51,7 +56,9 @@ builder.Services.AddIdentity<User, IdentityRole<Guid>>(options =>
 .AddDefaultTokenProviders();
 
 // Configure JWT Authentication
-var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key is not configured");
+var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY") ?? 
+            builder.Configuration["Jwt:Key"] ?? 
+            throw new InvalidOperationException("JWT Key is not configured");
 var key = Encoding.ASCII.GetBytes(jwtKey);
 
 builder.Services.AddAuthentication(x =>
@@ -68,9 +75,13 @@ builder.Services.AddAuthentication(x =>
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(key),
         ValidateIssuer = true,
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? 
+                     builder.Configuration["Jwt:Issuer"] ?? 
+                     "SecurityGuardPlatform",
         ValidateAudience = true,
-        ValidAudience = builder.Configuration["Jwt:Audience"],
+        ValidAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? 
+                       builder.Configuration["Jwt:Audience"] ?? 
+                       "SecurityGuardPlatformUsers",
         ValidateLifetime = true,
         ClockSkew = TimeSpan.Zero
     };

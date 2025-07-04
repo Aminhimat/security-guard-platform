@@ -1,0 +1,11 @@
+# Railway configuration for SecurityGuardPlatform Backend
+[build]
+  builder = "dockerfile"
+  dockerfilePath = "Dockerfile"
+
+[deploy]
+  startCommand = "dotnet SecurityGuardPlatform.API.dll"
+  
+[variables]
+  ASPNETCORE_ENVIRONMENT = "Production"
+  ASPNETCORE_URLS = "http://0.0.0.0:$PORT"
