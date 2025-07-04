@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "backend", "backend", "{C32DB213-EE8F-4E92-89D0-49D66526043C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{329B605C-FBE8-4FC7-B16C-6F17B71D3612}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecurityGuardPlatform.API", "backend\src\SecurityGuardPlatform.API\SecurityGuardPlatform.API.csproj", "{34AD706C-D142-49B3-B2D8-E856AACBDFBE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecurityGuardPlatform.Core", "backend\src\SecurityGuardPlatform.Core\SecurityGuardPlatform.Core.csproj", "{D5B1BA23-B5E7-4430-B3BD-DDBDF77C667D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecurityGuardPlatform.Infrastructure", "backend\src\SecurityGuardPlatform.Infrastructure\SecurityGuardPlatform.Infrastructure.csproj", "{D3759E9B-DAF4-4130-893E-91E936C6AB38}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecurityGuardPlatform.Application", "backend\src\SecurityGuardPlatform.Application\SecurityGuardPlatform.Application.csproj", "{779A9800-7757-4ACF-AAFF-478AD31C2F27}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{34AD706C-D142-49B3-B2D8-E856AACBDFBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34AD706C-D142-49B3-B2D8-E856AACBDFBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34AD706C-D142-49B3-B2D8-E856AACBDFBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34AD706C-D142-49B3-B2D8-E856AACBDFBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5B1BA23-B5E7-4430-B3BD-DDBDF77C667D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5B1BA23-B5E7-4430-B3BD-DDBDF77C667D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5B1BA23-B5E7-4430-B3BD-DDBDF77C667D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5B1BA23-B5E7-4430-B3BD-DDBDF77C667D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3759E9B-DAF4-4130-893E-91E936C6AB38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3759E9B-DAF4-4130-893E-91E936C6AB38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3759E9B-DAF4-4130-893E-91E936C6AB38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3759E9B-DAF4-4130-893E-91E936C6AB38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{779A9800-7757-4ACF-AAFF-478AD31C2F27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{779A9800-7757-4ACF-AAFF-478AD31C2F27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{779A9800-7757-4ACF-AAFF-478AD31C2F27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{779A9800-7757-4ACF-AAFF-478AD31C2F27}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{329B605C-FBE8-4FC7-B16C-6F17B71D3612} = {C32DB213-EE8F-4E92-89D0-49D66526043C}
+		{34AD706C-D142-49B3-B2D8-E856AACBDFBE} = {329B605C-FBE8-4FC7-B16C-6F17B71D3612}
+		{D5B1BA23-B5E7-4430-B3BD-DDBDF77C667D} = {329B605C-FBE8-4FC7-B16C-6F17B71D3612}
+		{D3759E9B-DAF4-4130-893E-91E936C6AB38} = {329B605C-FBE8-4FC7-B16C-6F17B71D3612}
+		{779A9800-7757-4ACF-AAFF-478AD31C2F27} = {329B605C-FBE8-4FC7-B16C-6F17B71D3612}
+	EndGlobalSection
+EndGlobal

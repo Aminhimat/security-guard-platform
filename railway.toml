@@ -1,0 +1,26 @@
+# Railway Deployment Configuration
+# This file will be used by Railway to deploy your application
+
+# Build Configuration
+[build]
+  builder = "dockerfile"
+  buildCommand = "dotnet publish -c Release -o /app/publish"
+
+# Runtime Configuration
+[deploy]
+  startCommand = "dotnet /app/publish/SecurityGuardPlatform.API.dll"
+  
+# Environment Variables Template
+# Set these in Railway dashboard:
+# DATABASE_URL=postgresql://user:password@host:port/database
+# JWT_KEY=your-secret-key-32-characters-minimum
+# ASPNETCORE_ENVIRONMENT=Production
+# ASPNETCORE_URLS=http://0.0.0.0:$PORT
+
+# Health Check
+[deploy.healthcheck]
+  path = "/health"
+  port = "$PORT"
+  timeout = "10s"
+  interval = "30s"
+  retries = 3

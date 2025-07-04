@@ -1,0 +1,16 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Build and Run Security Guard Platform",
+			"type": "shell",
+			"command": "cd backend/src/SecurityGuardPlatform.API && dotnet run",
+			"group": "build",
+			"isBackground": true,
+			"problemMatcher": [
+				"$tsc"
+			],
+			"args": []
+		}
+	]
+}
