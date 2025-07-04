@@ -1,7 +1,7 @@
 # Multi-stage Dockerfile for Security Guard Platform API
 
 # Build Stage
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 # Copy csproj files and restore dependencies
@@ -24,7 +24,7 @@ FROM build AS publish
 RUN dotnet publish "SecurityGuardPlatform.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 # Runtime Stage
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 
 # Create a non-root user
