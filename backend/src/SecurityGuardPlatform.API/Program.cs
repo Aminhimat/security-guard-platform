@@ -30,7 +30,7 @@ if (builder.Environment.IsProduction())
     // Debug logging
     Console.WriteLine($"Environment: {builder.Environment.EnvironmentName}");
     Console.WriteLine($"DATABASE_URL from env: {Environment.GetEnvironmentVariable("DATABASE_URL") ?? "NULL"}");
-    Console.WriteLine($"Using connection string: {connectionString?.Substring(0, Math.Min(50, connectionString.Length ?? 0))}...");
+    Console.WriteLine($"Using connection string: {connectionString?.Substring(0, Math.Min(50, connectionString?.Length ?? 0))}...");
     
     if (string.IsNullOrEmpty(connectionString))
     {
