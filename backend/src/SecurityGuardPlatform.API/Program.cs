@@ -21,39 +21,24 @@ builder.Host.UseSerilog();
 
 // Add services to the container.
 // Configure Database - Use PostgreSQL in production, SQLite in development
-if (builder.Environment.IsProduction())
+// Temporarily use SQLite for testing until PostgreSQL is set up
+var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
+
+if (builder.Environment.IsProduction() && !string.IsNullOrEmpty(connectionString))
 {
-    // Production: Use PostgreSQL
-    var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") ?? 
-                          builder.Configuration.GetConnectionString("DATABASE_URL") ??
-                          builder.Configuration.GetConnectionString("PostgreSQLConnection");
-    
-    // Debug logging
+    // Production with PostgreSQL
     Console.WriteLine($"Environment: {builder.Environment.EnvironmentName}");
-    Console.WriteLine($"All environment variables containing 'DATABASE':");
-    foreach (DictionaryEntry env in Environment.GetEnvironmentVariables())
-    {
-        var envKey = env.Key.ToString();
-        if (envKey.Contains("DATABASE", StringComparison.OrdinalIgnoreCase))
-        {
-            var value = env.Value?.ToString();
-            Console.WriteLine($"  {envKey}: {(string.IsNullOrEmpty(value) ? "EMPTY" : value.Substring(0, Math.Min(50, value.Length)))}...");
-        }
-    }
-    Console.WriteLine($"DATABASE_URL from env: {Environment.GetEnvironmentVariable("DATABASE_URL") ?? "NULL"}");
-    Console.WriteLine($"Using connection string: {connectionString?.Substring(0, Math.Min(50, connectionString?.Length ?? 0))}...");
-    
-    if (string.IsNullOrEmpty(connectionString))
-    {
-        throw new InvalidOperationException("DATABASE_URL environment variable is not configured for production");
-    }
+    Console.WriteLine($"Using PostgreSQL connection");
     
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.UseNpgsql(connectionString));
 }
 else
 {
-    // Development: Use SQLite
+    // Development or Production without DATABASE_URL - Use SQLite
+    Console.WriteLine($"Environment: {builder.Environment.EnvironmentName}");
+    Console.WriteLine($"Using SQLite connection (DATABASE_URL: {connectionString ?? "NULL"})");
+    
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 }
