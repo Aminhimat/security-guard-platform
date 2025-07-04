@@ -15,13 +15,12 @@ RUN dotnet restore "SecurityGuardPlatform.API/SecurityGuardPlatform.API.csproj"
 # Copy source code
 COPY backend/src/ .
 
-# Build the application
+# Build and publish the application
 WORKDIR "/src/SecurityGuardPlatform.API"
-RUN dotnet build "SecurityGuardPlatform.API.csproj" -c Release -o /app/build
+RUN dotnet publish "SecurityGuardPlatform.API.csproj" -c Release -o /app/out /p:UseAppHost=false
 
-# Publish Stage
-FROM build AS publish
-RUN dotnet publish "SecurityGuardPlatform.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
+# Debug: List published files
+RUN ls -la /app/out/
 
 # Runtime Stage
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
@@ -31,10 +30,13 @@ WORKDIR /app
 RUN groupadd -r appuser && useradd -r -g appuser appuser
 
 # Copy published app
-COPY --from=publish /app/publish .
+COPY --from=build /app/out .
 
 # Create logs directory
 RUN mkdir -p logs && chown -R appuser:appuser logs
+
+# Debug: List files in /app
+RUN ls -la /app/
 
 # Switch to non-root user
 USER appuser
