@@ -6,6 +6,7 @@ using SecurityGuardPlatform.Core.Constants;
 using SecurityGuardPlatform.Core.Entities;
 using SecurityGuardPlatform.Infrastructure.Data;
 using Serilog;
+using System.Collections;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,11 +33,11 @@ if (builder.Environment.IsProduction())
     Console.WriteLine($"All environment variables containing 'DATABASE':");
     foreach (DictionaryEntry env in Environment.GetEnvironmentVariables())
     {
-        var key = env.Key.ToString();
-        if (key.Contains("DATABASE", StringComparison.OrdinalIgnoreCase))
+        var envKey = env.Key.ToString();
+        if (envKey.Contains("DATABASE", StringComparison.OrdinalIgnoreCase))
         {
             var value = env.Value?.ToString();
-            Console.WriteLine($"  {key}: {(string.IsNullOrEmpty(value) ? "EMPTY" : value.Substring(0, Math.Min(50, value.Length)))}...");
+            Console.WriteLine($"  {envKey}: {(string.IsNullOrEmpty(value) ? "EMPTY" : value.Substring(0, Math.Min(50, value.Length)))}...");
         }
     }
     Console.WriteLine($"DATABASE_URL from env: {Environment.GetEnvironmentVariable("DATABASE_URL") ?? "NULL"}");
