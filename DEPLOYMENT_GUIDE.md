@@ -1,6 +1,25 @@
 # Deployment Guide for Security Guard Management Platform
 
-## Option 1: Railway (Recommended - All-in-One)
+## Option 1: Supabase + Render (Recommended - Most Reliable)
+
+### Why This Option?
+- **Reliability**: Supabase is much more stable than Railway
+- **Simplicity**: Easier setup and fewer configuration issues
+- **Cost**: Completely free for small projects
+- **Performance**: Better uptime and faster deployment
+
+### Quick Setup
+1. **Database**: Create free Supabase PostgreSQL database
+2. **Backend**: Deploy to Render using Docker
+3. **Frontend**: Deploy to Netlify (drag & drop)
+
+**See detailed instructions in: `SUPABASE_DEPLOYMENT.md`**
+
+---
+
+## Option 2: Railway (Alternative - Has Issues)
+
+*Note: Railway has been unreliable with environment variables and PostgreSQL connections. Use Supabase option instead.*
 
 ### Backend API Deployment
 1. **Prepare for PostgreSQL**:
