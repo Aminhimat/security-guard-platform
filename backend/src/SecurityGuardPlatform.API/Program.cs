@@ -7,6 +7,7 @@ using SecurityGuardPlatform.Core.Entities;
 using SecurityGuardPlatform.Infrastructure.Data;
 using Serilog;
 using System.Collections;
+using System.Linq;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,9 +34,21 @@ if (builder.Environment.IsProduction() && !string.IsNullOrEmpty(databaseUrl))
     
     // Parse the DATABASE_URL and convert to Npgsql connection string
     var uri = new Uri(databaseUrl);
-    var connectionString = $"Host={uri.Host};Port={uri.Port};Database={uri.LocalPath.Substring(1)};Username={uri.UserInfo.Split(':')[0]};Password={uri.UserInfo.Split(':')[1]};SSL Mode=Require;Trust Server Certificate=true";
     
-    Console.WriteLine($"Converted connection string starts with: 'Host={uri.Host};Port={uri.Port}'");
+    // Try to resolve IPv4 address to avoid IPv6 connectivity issues
+    var hostEntry = System.Net.Dns.GetHostEntry(uri.Host);
+    var ipv4Address = hostEntry.AddressList.FirstOrDefault(addr => addr.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
+    var actualHost = ipv4Address?.ToString() ?? uri.Host;
+    
+    Console.WriteLine($"Original host: {uri.Host}");
+    if (ipv4Address != null)
+    {
+        Console.WriteLine($"Resolved IPv4 address: {actualHost}");
+    }
+    
+    var connectionString = $"Host={actualHost};Port={uri.Port};Database={uri.LocalPath.Substring(1)};Username={uri.UserInfo.Split(':')[0]};Password={uri.UserInfo.Split(':')[1]};SSL Mode=Require;Trust Server Certificate=true;Include Error Detail=true;Timeout=30;Command Timeout=30";
+    
+    Console.WriteLine($"Converted connection string starts with: 'Host={actualHost};Port={uri.Port}'");
     
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.UseNpgsql(connectionString));
