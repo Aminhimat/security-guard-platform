@@ -29,6 +29,8 @@ if (builder.Environment.IsProduction() && !string.IsNullOrEmpty(connectionString
     // Production with PostgreSQL
     Console.WriteLine($"Environment: {builder.Environment.EnvironmentName}");
     Console.WriteLine($"Using PostgreSQL connection");
+    Console.WriteLine($"Connection string length: {connectionString.Length}");
+    Console.WriteLine($"Connection string starts with: '{connectionString.Substring(0, Math.Min(50, connectionString.Length))}'");
     
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.UseNpgsql(connectionString));
