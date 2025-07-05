@@ -21,16 +21,21 @@ builder.Host.UseSerilog();
 
 // Add services to the container.
 // Configure Database - Use PostgreSQL in production, SQLite in development
-// Temporarily use SQLite for testing until PostgreSQL is set up
-var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
+var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
 
-if (builder.Environment.IsProduction() && !string.IsNullOrEmpty(connectionString))
+if (builder.Environment.IsProduction() && !string.IsNullOrEmpty(databaseUrl))
 {
-    // Production with PostgreSQL
+    // Production with PostgreSQL - Convert URI to connection string
     Console.WriteLine($"Environment: {builder.Environment.EnvironmentName}");
     Console.WriteLine($"Using PostgreSQL connection");
-    Console.WriteLine($"Connection string length: {connectionString.Length}");
-    Console.WriteLine($"Connection string starts with: '{connectionString.Substring(0, Math.Min(50, connectionString.Length))}'");
+    Console.WriteLine($"Database URL length: {databaseUrl.Length}");
+    Console.WriteLine($"Database URL starts with: '{databaseUrl.Substring(0, Math.Min(50, databaseUrl.Length))}'");
+    
+    // Parse the DATABASE_URL and convert to Npgsql connection string
+    var uri = new Uri(databaseUrl);
+    var connectionString = $"Host={uri.Host};Port={uri.Port};Database={uri.LocalPath.Substring(1)};Username={uri.UserInfo.Split(':')[0]};Password={uri.UserInfo.Split(':')[1]};SSL Mode=Require;Trust Server Certificate=true";
+    
+    Console.WriteLine($"Converted connection string starts with: 'Host={uri.Host};Port={uri.Port}'");
     
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.UseNpgsql(connectionString));
@@ -39,7 +44,7 @@ else
 {
     // Development or Production without DATABASE_URL - Use SQLite
     Console.WriteLine($"Environment: {builder.Environment.EnvironmentName}");
-    Console.WriteLine($"Using SQLite connection (DATABASE_URL: {connectionString ?? "NULL"})");
+    Console.WriteLine($"Using SQLite connection (DATABASE_URL: {databaseUrl ?? "NULL"})");
     
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
