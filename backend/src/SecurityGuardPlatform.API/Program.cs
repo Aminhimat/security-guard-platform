@@ -21,46 +21,28 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 // Add services to the container.
-// Configure Database - Use PostgreSQL in production, SQLite in development
-var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+// Configure Database - Use SQL Server in production, SQLite in development
+var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") ?? 
+                      builder.Configuration.GetConnectionString("DefaultConnection");
 
-if (builder.Environment.IsProduction() && !string.IsNullOrEmpty(databaseUrl))
+if (builder.Environment.IsProduction() && !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DATABASE_URL")))
 {
-    // Production with PostgreSQL - Convert URI to connection string
+    // Production with SQL Server
     Console.WriteLine($"Environment: {builder.Environment.EnvironmentName}");
-    Console.WriteLine($"Using PostgreSQL connection");
-    Console.WriteLine($"Database URL length: {databaseUrl.Length}");
-    Console.WriteLine($"Database URL starts with: '{databaseUrl.Substring(0, Math.Min(50, databaseUrl.Length))}'");
-    
-    // Parse the DATABASE_URL and convert to Npgsql connection string
-    var uri = new Uri(databaseUrl);
-    
-    // Try to resolve IPv4 address to avoid IPv6 connectivity issues
-    var hostEntry = System.Net.Dns.GetHostEntry(uri.Host);
-    var ipv4Address = hostEntry.AddressList.FirstOrDefault(addr => addr.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
-    var actualHost = ipv4Address?.ToString() ?? uri.Host;
-    
-    Console.WriteLine($"Original host: {uri.Host}");
-    if (ipv4Address != null)
-    {
-        Console.WriteLine($"Resolved IPv4 address: {actualHost}");
-    }
-    
-    var connectionString = $"Host={actualHost};Port={uri.Port};Database={uri.LocalPath.Substring(1)};Username={uri.UserInfo.Split(':')[0]};Password={uri.UserInfo.Split(':')[1]};SSL Mode=Require;Trust Server Certificate=true;Include Error Detail=true;Timeout=30;Command Timeout=30";
-    
-    Console.WriteLine($"Converted connection string starts with: 'Host={actualHost};Port={uri.Port}'");
+    Console.WriteLine($"Using SQL Server connection");
+    Console.WriteLine($"Connection string configured: {!string.IsNullOrEmpty(connectionString)}");
     
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
-        options.UseNpgsql(connectionString));
+        options.UseSqlServer(connectionString));
 }
 else
 {
-    // Development or Production without DATABASE_URL - Use SQLite
+    // Development - Use SQLite
     Console.WriteLine($"Environment: {builder.Environment.EnvironmentName}");
-    Console.WriteLine($"Using SQLite connection (DATABASE_URL: {databaseUrl ?? "NULL"})");
+    Console.WriteLine($"Using SQLite connection");
     
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
-        options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+        options.UseSqlite(connectionString));
 }
 
 // Configure Identity

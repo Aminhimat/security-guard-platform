@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static const String baseUrl = 'http://localhost:5010/api';
+  static const String baseUrl = 'https://security-guard-platform.fly.dev/api';
   String? _token;
   
   // Singleton pattern

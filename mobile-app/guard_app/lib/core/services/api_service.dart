@@ -3,7 +3,7 @@ import '../models/user_model.dart';
 
 class ApiService {
   late final Dio _dio;
-  static const String baseUrl = 'http://localhost:5010/api'; // Backend API URL
+  static const String baseUrl = 'https://security-guard-platform.fly.dev/api'; // Backend API URL
 
   ApiService() {
     _dio = Dio(BaseOptions(
